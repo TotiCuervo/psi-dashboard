@@ -107,10 +107,10 @@ export default function DashboardPage() {
                                 onClick={handleProcess}
                                 disabled={!file}
                                 size="lg"
-                                className="self-start px-8"
+                                className="self-end px-8"
                                 data-testid="upload__process-btn"
                             >
-                                {file ? 'Process file' : 'Select a file to get started'}
+                                Execute
                             </Button>
                         </div>
                     </div>
