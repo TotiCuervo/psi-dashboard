@@ -47,73 +47,105 @@ export default function DashboardPage() {
         }
     }
 
+    function handleNewFile() {
+        setFile(null)
+        setResult(null)
+        setError(null)
+    }
+
     return (
-        <main className="min-h-screen bg-background">
-            <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-8">
-
-                {/* Header */}
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">PSI Dashboard</h1>
-                    <p className="text-sm text-muted-foreground">
-                        Upload your master Excel file to view open order demand
-                    </p>
-                </div>
-
-                {/* Upload section */}
-                <div className="flex flex-col gap-4 max-w-xl">
-                    <FileUploadZone
-                        onFileSelected={handleFileSelected}
-                        confirmed={!!result}
-                        fileName={file?.name}
-                    />
-
-                    {error && (
-                        <Alert variant="destructive" data-testid="upload__error">
-                            <AlertDescription>{error}</AlertDescription>
-                        </Alert>
+        <div className="min-h-screen flex flex-col bg-background">
+            {/* Sticky top bar */}
+            <header className="sticky top-0 z-20 bg-card border-b border-border">
+                <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm font-semibold tracking-tight">PSI Dashboard</span>
+                        {result && file && (
+                            <span className="text-xs text-muted-foreground border border-border rounded px-2 py-0.5 font-mono truncate max-w-[240px]">
+                                {file.name}
+                            </span>
+                        )}
+                    </div>
+                    {result && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleNewFile}
+                            data-testid="header__new-file-btn"
+                            className="text-xs h-7"
+                        >
+                            Upload new file
+                        </Button>
                     )}
-
-                    <Button
-                        onClick={handleProcess}
-                        disabled={!file || loading}
-                        className="w-full"
-                        data-testid="upload__process-btn"
-                    >
-                        {loading ? 'Processing…' : 'Process File'}
-                    </Button>
                 </div>
+            </header>
 
-                {/* Loading state */}
-                {loading && (
-                    <div className="flex flex-col gap-6" data-testid="loading-state">
-                        <div className="grid grid-cols-3 gap-4">
-                            {[0, 1, 2].map((i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+            <main className="flex-1">
+                {/* Upload screen */}
+                {!result && !loading && (
+                    <div className="max-w-7xl mx-auto px-6 py-16 flex justify-center">
+                        <div className="w-full max-w-lg flex flex-col gap-6">
+                            <div className="flex flex-col gap-2">
+                                <h1 className="text-2xl font-semibold tracking-tight">Open Order Demand</h1>
+                                <p className="text-muted-foreground">
+                                    Upload your master Excel file to replace the manual pivot table refresh
+                                </p>
+                            </div>
+
+                            <FileUploadZone
+                                onFileSelected={handleFileSelected}
+                                fileName={file?.name}
+                            />
+
+                            {error && (
+                                <Alert variant="destructive" data-testid="upload__error">
+                                    <AlertDescription>{error}</AlertDescription>
+                                </Alert>
+                            )}
+
+                            <Button
+                                onClick={handleProcess}
+                                disabled={!file}
+                                size="lg"
+                                className="self-start px-8"
+                                data-testid="upload__process-btn"
+                            >
+                                {file ? 'Process file' : 'Select a file to get started'}
+                            </Button>
                         </div>
-                        <Skeleton className="h-64 rounded-xl" />
-                        <Skeleton className="h-64 rounded-xl" />
                     </div>
                 )}
 
-                {/* Unknown SKU warning */}
-                {result && result.unknownSkus.length > 0 && (
-                    <Alert data-testid="upload__unknown-skus">
-                        <AlertDescription>
-                            <span className="font-medium">Unrecognized SKUs found:</span>{' '}
-                            {result.unknownSkus.join(', ')} — not in the master SKU list and excluded from calculations.
-                        </AlertDescription>
-                    </Alert>
+                {/* Loading */}
+                {loading && (
+                    <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-6" data-testid="loading-state">
+                        <div className="grid grid-cols-3 gap-4">
+                            {[0, 1, 2].map((i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+                        </div>
+                        <Skeleton className="h-72 rounded-xl" />
+                        <Skeleton className="h-72 rounded-xl" />
+                        <Skeleton className="h-72 rounded-xl" />
+                    </div>
                 )}
 
-                {/* Dashboard panels */}
+                {/* Dashboard */}
                 {result && !loading && (
-                    <div className="flex flex-col gap-6">
+                    <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col gap-6">
+                        {result.unknownSkus.length > 0 && (
+                            <Alert data-testid="upload__unknown-skus">
+                                <AlertDescription>
+                                    <span className="font-medium">Unrecognized SKUs found:</span>{' '}
+                                    {result.unknownSkus.join(', ')} — not in the master SKU list and excluded.
+                                </AlertDescription>
+                            </Alert>
+                        )}
                         <SummaryScorecard result={result} />
                         <OpenOrdersBySkuPanel result={result} />
                         <WeeklyDemandCalendar result={result} />
                         <CustomerBreakdownPanel result={result} />
                     </div>
                 )}
-            </div>
-        </main>
+            </main>
+        </div>
     )
 }

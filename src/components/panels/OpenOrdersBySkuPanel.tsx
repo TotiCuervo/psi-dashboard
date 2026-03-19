@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { MASTER_SKUS } from '@/lib/skus'
 import type { ParseResult } from '@/types/orders'
@@ -14,29 +14,30 @@ function formatDate(iso: string) {
 export function OpenOrdersBySkuPanel({ result }: Props) {
     return (
         <Card data-testid="panel__open-orders">
-            <CardHeader className="border-b pb-4">
-                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                    Open Orders by SKU
-                </CardTitle>
+            <CardHeader className="border-b pb-4 flex-row items-center justify-between">
+                <p className="text-sm font-semibold tracking-tight">Open Orders by SKU</p>
+                <span className="text-xs text-muted-foreground tabular-nums">
+                    {result.skuSummaries.length} SKUs
+                </span>
             </CardHeader>
-            <CardContent className="px-0">
+            <CardContent className="px-0 pt-0">
                 <Table>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead className="pl-6 text-xs uppercase tracking-wide text-muted-foreground">SKU</TableHead>
-                            <TableHead className="text-xs uppercase tracking-wide text-muted-foreground">Product</TableHead>
-                            <TableHead className="text-right text-xs uppercase tracking-wide text-muted-foreground">Total Units</TableHead>
-                            <TableHead className="pr-6 text-right text-xs uppercase tracking-wide text-muted-foreground">Nearest Ship Week</TableHead>
+                        <TableRow className="bg-muted/40 hover:bg-muted/40">
+                            <TableHead className="pl-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">SKU</TableHead>
+                            <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Product</TableHead>
+                            <TableHead className="text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Units</TableHead>
+                            <TableHead className="pr-6 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Nearest Ship Week</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {result.skuSummaries.map((s, i) => (
-                            <TableRow key={s.sku} className={i % 2 === 1 ? 'bg-muted/40' : ''} data-testid={`open-orders__row-${s.sku}`}>
-                                <TableCell className="pl-6 font-mono text-xs">{s.sku}</TableCell>
-                                <TableCell className="text-sm text-muted-foreground">
+                        {result.skuSummaries.map((s) => (
+                            <TableRow key={s.sku} data-testid={`open-orders__row-${s.sku}`}>
+                                <TableCell className="pl-6 font-mono text-xs text-muted-foreground">{s.sku}</TableCell>
+                                <TableCell className="text-sm font-medium">
                                     {MASTER_SKUS[s.sku] ?? <span className="text-destructive text-xs">Unrecognized</span>}
                                 </TableCell>
-                                <TableCell className="text-right tabular-nums font-medium">{s.totalQuantity.toLocaleString()}</TableCell>
+                                <TableCell className="text-right tabular-nums font-semibold">{s.totalQuantity.toLocaleString()}</TableCell>
                                 <TableCell className="pr-6 text-right tabular-nums text-muted-foreground text-sm">
                                     {formatDate(s.nearestWeek)}
                                 </TableCell>
