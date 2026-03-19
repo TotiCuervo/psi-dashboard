@@ -7,9 +7,20 @@ import { Input } from '@/components/ui/input'
 type Props = {
     onFileSelected: (file: File) => void
     fileName?: string
+    accept?: string           // e.g. ".xlsx" or ".csv"
+    label?: string            // primary drop zone label
+    hint?: string             // secondary hint text
+    testId?: string           // data-testid prefix
 }
 
-export function FileUploadZone({ onFileSelected, fileName }: Props) {
+export function FileUploadZone({
+    onFileSelected,
+    fileName,
+    accept = '.xlsx',
+    label = 'Drop your Excel file here',
+    hint = '.xlsx only · click to browse',
+    testId = 'upload',
+}: Props) {
     const inputRef = useRef<HTMLInputElement>(null)
     const [dragging, setDragging] = useState(false)
 
@@ -27,13 +38,13 @@ export function FileUploadZone({ onFileSelected, fileName }: Props) {
 
     return (
         <div
-            data-testid="upload__dropzone"
+            data-testid={`${testId}__dropzone`}
             onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
             onDragLeave={() => setDragging(false)}
             onDrop={handleDrop}
             onClick={() => inputRef.current?.click()}
             className={cn(
-                'flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed px-8 py-12 cursor-pointer transition-colors',
+                'flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed px-8 py-10 cursor-pointer transition-colors',
                 dragging
                     ? 'border-foreground bg-muted/60'
                     : fileName
@@ -44,14 +55,14 @@ export function FileUploadZone({ onFileSelected, fileName }: Props) {
             <Input
                 ref={inputRef}
                 type="file"
-                accept=".xlsx"
+                accept={accept}
                 className="hidden"
                 onChange={handleChange}
-                data-testid="upload__input"
+                data-testid={`${testId}__input`}
             />
 
             {fileName ? (
-                <div className="flex flex-col items-center gap-2 text-center" data-testid="upload__confirmed">
+                <div className="flex flex-col items-center gap-2 text-center" data-testid={`${testId}__confirmed`}>
                     <div className="size-10 rounded-full bg-muted flex items-center justify-center">
                         <svg className="size-5 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
@@ -70,8 +81,8 @@ export function FileUploadZone({ onFileSelected, fileName }: Props) {
                         </svg>
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-foreground">Drop your Excel file here</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">.xlsx only · click to browse</p>
+                        <p className="text-sm font-medium text-foreground">{label}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{hint}</p>
                     </div>
                 </div>
             )}
