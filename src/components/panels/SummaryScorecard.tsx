@@ -29,26 +29,26 @@ export function SummaryScorecard({ result }: Props) {
     ]
 
     return (
-        <div className="grid grid-cols-3 gap-4" data-testid="scorecard">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4" data-testid="scorecard">
             {stats.map((stat) => (
                 <Card
                     key={stat.label}
                     className={stat.primary ? 'border-foreground/20' : undefined}
                 >
-                    <CardContent className="px-6 py-5 flex flex-col gap-2">
-                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    <CardContent className="px-3 py-4 sm:px-6 sm:py-5 flex flex-col gap-1 sm:gap-2">
+                        <p className="text-[10px] sm:text-xs font-medium text-muted-foreground uppercase tracking-wider">
                             {stat.label}
                         </p>
                         <p
                             className={stat.primary
-                                ? 'text-4xl font-bold tabular-nums tracking-tight'
-                                : 'text-3xl font-semibold tabular-nums tracking-tight'
+                                ? 'text-2xl sm:text-4xl font-bold tabular-nums tracking-tight'
+                                : 'text-xl sm:text-3xl font-semibold tabular-nums tracking-tight'
                             }
                             data-testid={stat.testId}
                         >
                             {stat.value}
                         </p>
-                        <p className="text-xs text-muted-foreground">{stat.description}</p>
+                        <p className="text-[10px] sm:text-xs text-muted-foreground">{stat.description}</p>
                     </CardContent>
                 </Card>
             ))}

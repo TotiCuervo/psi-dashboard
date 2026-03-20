@@ -30,12 +30,12 @@ export function CustomerBreakdownPanel({ result }: Props) {
                     {rows.length} customers
                 </span>
             </CardHeader>
-            <CardContent className="px-0 pt-0">
+            <CardContent className="px-0 pt-0 overflow-x-auto">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/40 hover:bg-muted/40">
                             <TableHead className="pl-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">Customer</TableHead>
-                            <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Share</TableHead>
+                            <TableHead className="hidden sm:table-cell text-xs font-medium uppercase tracking-wider text-muted-foreground">Share</TableHead>
                             <TableHead className="text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Open Units</TableHead>
                             <TableHead className="pr-6 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground w-16">%</TableHead>
                         </TableRow>
@@ -44,7 +44,7 @@ export function CustomerBreakdownPanel({ result }: Props) {
                         {rows.map((r) => (
                             <TableRow key={r.customer} data-testid="customer__row">
                                 <TableCell className="pl-6 text-sm font-medium w-48">{r.customer}</TableCell>
-                                <TableCell className="w-48 pr-4">
+                                <TableCell className="hidden sm:table-cell w-48 pr-4">
                                     <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                                         <div
                                             className="h-full rounded-full bg-foreground/30"

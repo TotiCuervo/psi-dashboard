@@ -13,8 +13,7 @@ export async function POST(req: Request) {
     }
 
     try {
-        const buffer = Buffer.from(await file.arrayBuffer())
-        const result = parseOrders(buffer)
+        const result = parseOrders(await file.arrayBuffer())
         return Response.json(result)
     } catch (e: unknown) {
         const message = e instanceof Error ? e.message : 'Failed to parse file.'

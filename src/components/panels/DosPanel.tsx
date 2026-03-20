@@ -66,14 +66,14 @@ export function DosPanel({ dosSummaries }: Props) {
                     </span>
                 </div>
             </CardHeader>
-            <CardContent className="px-0 pt-0">
+            <CardContent className="px-0 pt-0 overflow-x-auto">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/40 hover:bg-muted/40">
                             <TableHead className="pl-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">SKU</TableHead>
-                            <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Product</TableHead>
-                            <TableHead className="text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Open Orders</TableHead>
-                            <TableHead className="text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Avail. Inv.</TableHead>
+                            <TableHead className="hidden sm:table-cell text-xs font-medium uppercase tracking-wider text-muted-foreground">Product</TableHead>
+                            <TableHead className="hidden sm:table-cell text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Open Orders</TableHead>
+                            <TableHead className="hidden sm:table-cell text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Avail. Inv.</TableHead>
                             <TableHead className="text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">DOS</TableHead>
                             <TableHead className="pr-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">Status</TableHead>
                         </TableRow>
@@ -86,13 +86,13 @@ export function DosPanel({ dosSummaries }: Props) {
                                     <TableCell className="pl-6 font-mono text-xs text-muted-foreground">
                                         {d.sku}
                                     </TableCell>
-                                    <TableCell className="text-sm font-medium">
+                                    <TableCell className="hidden sm:table-cell text-sm font-medium">
                                         {MASTER_SKUS[d.sku] ?? d.sku}
                                     </TableCell>
-                                    <TableCell className="text-right tabular-nums text-sm">
+                                    <TableCell className="hidden sm:table-cell text-right tabular-nums text-sm">
                                         {d.totalOpenOrders.toLocaleString()}
                                     </TableCell>
-                                    <TableCell className="text-right tabular-nums text-sm">
+                                    <TableCell className="hidden sm:table-cell text-right tabular-nums text-sm">
                                         {d.totalAvailable.toLocaleString()}
                                     </TableCell>
                                     <TableCell className="text-right tabular-nums font-semibold">
