@@ -11,6 +11,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { calculateDos } from '@/lib/calculateDos'
+import { parseOrders } from '@/lib/parseOrders'
+import { parseInventory } from '@/lib/parseInventory'
 import type { ParseResult } from '@/types/orders'
 import type { InventoryResult, SkuDos } from '@/types/inventory'
 
@@ -54,38 +56,24 @@ export default function DashboardPage() {
         setDosSummaries(null)
 
         try {
-            // Always process the orders file
-            const orderForm = new FormData()
-            orderForm.append('file', orderFile)
-            const orderRes = await fetch('/api/parse', { method: 'POST', body: orderForm })
-            const orderData = await orderRes.json()
-
-            if (!orderRes.ok) {
-                setError(orderData.error ?? 'Failed to process the orders file.')
-                return
-            }
-
-            const parsedOrders = orderData as ParseResult
+            // Parse orders file directly in the browser
+            const parsedOrders = parseOrders(await orderFile.arrayBuffer())
             setResult(parsedOrders)
 
-            // Optionally process the inventory file if provided
+            // Optionally parse inventory file if provided
             if (inventoryFile) {
-                const invForm = new FormData()
-                invForm.append('file', inventoryFile)
-                const invRes = await fetch('/api/parse-inventory', { method: 'POST', body: invForm })
-                const invData = await invRes.json()
-
-                if (!invRes.ok) {
-                    // Surface inventory error but still show order panels
-                    setError(`Inventory file error: ${invData.error ?? 'Unknown error'}`)
-                } else {
-                    const parsedInventory = invData as InventoryResult
+                try {
+                    const parsedInventory = parseInventory(await inventoryFile.text())
                     setInventoryResult(parsedInventory)
                     setDosSummaries(calculateDos(parsedOrders, parsedInventory))
+                } catch (e: unknown) {
+                    // Surface inventory error but still show order panels
+                    const msg = e instanceof Error ? e.message : 'Unknown error'
+                    setError(`Inventory file error: ${msg}`)
                 }
             }
-        } catch {
-            setError('Failed to process the file. Please try again.')
+        } catch (e: unknown) {
+            setError(e instanceof Error ? e.message : 'Failed to process the file. Please try again.')
         } finally {
             setLoading(false)
         }

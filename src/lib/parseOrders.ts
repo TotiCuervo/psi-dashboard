@@ -27,8 +27,8 @@ function toIsoDate(value: unknown): string | null {
     return null
 }
 
-export function parseOrders(buffer: Buffer): ParseResult {
-    const workbook = XLSX.read(buffer, { type: 'buffer', cellDates: true })
+export function parseOrders(data: ArrayBuffer): ParseResult {
+    const workbook = XLSX.read(new Uint8Array(data), { type: 'array', cellDates: true })
 
     if (!workbook.SheetNames.includes(TAB_NAME)) {
         throw new Error(`Could not find a tab named '${TAB_NAME}' in the uploaded file.`)
