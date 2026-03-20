@@ -20,21 +20,21 @@ export function OpenOrdersBySkuPanel({ result }: Props) {
                     {result.skuSummaries.length} SKUs
                 </span>
             </CardHeader>
-            <CardContent className="px-0 pt-0">
+            <CardContent className="px-0 pt-0 overflow-x-auto">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-muted/40 hover:bg-muted/40">
-                            <TableHead className="pl-6 text-xs font-medium uppercase tracking-wider text-muted-foreground">SKU</TableHead>
-                            <TableHead className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Product</TableHead>
+                            <TableHead className="pl-6 hidden sm:table-cell text-xs font-medium uppercase tracking-wider text-muted-foreground">SKU</TableHead>
+                            <TableHead className="pl-6 sm:pl-0 text-xs font-medium uppercase tracking-wider text-muted-foreground">Product</TableHead>
                             <TableHead className="text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Total Units</TableHead>
-                            <TableHead className="pr-6 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Nearest Ship Week</TableHead>
+                            <TableHead className="pr-6 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">Ship Week</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {result.skuSummaries.map((s) => (
                             <TableRow key={s.sku} data-testid={`open-orders__row-${s.sku}`}>
-                                <TableCell className="pl-6 font-mono text-xs text-muted-foreground">{s.sku}</TableCell>
-                                <TableCell className="text-sm font-medium">
+                                <TableCell className="pl-6 hidden sm:table-cell font-mono text-xs text-muted-foreground">{s.sku}</TableCell>
+                                <TableCell className="pl-6 sm:pl-4 text-sm font-medium">
                                     {MASTER_SKUS[s.sku] ?? <span className="text-destructive text-xs">Unrecognized</span>}
                                 </TableCell>
                                 <TableCell className="text-right tabular-nums font-semibold">{s.totalQuantity.toLocaleString()}</TableCell>

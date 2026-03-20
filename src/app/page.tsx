@@ -96,15 +96,15 @@ export default function DashboardPage() {
             {/* Sticky top bar */}
             <header className="sticky top-0 z-20 bg-card border-b border-border">
                 <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold tracking-tight">PSI Dashboard</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-sm font-semibold tracking-tight shrink-0">PSI Dashboard</span>
                         {result && orderFile && (
-                            <span className="text-xs text-muted-foreground border border-border rounded px-2 py-0.5 font-mono truncate max-w-[240px]">
+                            <span className="hidden sm:inline text-xs text-muted-foreground border border-border rounded px-2 py-0.5 font-mono truncate max-w-[200px]">
                                 {orderFile.name}
                             </span>
                         )}
                         {result && inventoryFile && inventoryResult && (
-                            <span className="text-xs text-muted-foreground border border-border rounded px-2 py-0.5 font-mono truncate max-w-[240px]">
+                            <span className="hidden sm:inline text-xs text-muted-foreground border border-border rounded px-2 py-0.5 font-mono truncate max-w-[200px]">
                                 {inventoryFile.name}
                             </span>
                         )}
@@ -115,9 +115,10 @@ export default function DashboardPage() {
                             size="sm"
                             onClick={handleNewFile}
                             data-testid="header__new-file-btn"
-                            className="text-xs h-7"
+                            className="text-xs h-7 shrink-0"
                         >
-                            Upload new file
+                            <span className="hidden sm:inline">Upload new file</span>
+                            <span className="sm:hidden">New file</span>
                         </Button>
                     )}
                 </div>
